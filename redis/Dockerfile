@@ -1,7 +1,7 @@
 FROM centos:7.4.1708
 MAINTAINER chenchao
 
-ENV INSTALL_DIR /opt/app/redis40
+ENV INSTALL_DIR /opt/app/redis50
 
 RUN yum -y install gcc gcc-c++ make \
     && yum clean all -y
@@ -10,12 +10,14 @@ RUN yum -y install gcc gcc-c++ make \
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo 'Asia/Shanghai' > /etc/timezone
 
+ARG REDIS_VERSION
+
 # Mysql
-ADD source/redis-4.0.10.tar.gz /tmp/
-RUN cd /tmp/redis-4.0.10 \
+ADD source/redis-${REDIS_VERSION}.tar.gz /tmp/
+RUN cd /tmp/redis-${REDIS_VERSION} \
     && make && make install PREFIX=${INSTALL_DIR} \
     && mkdir ${INSTALL_DIR}/{etc,var,logs,db_6379} \
-    && rm -r /tmp/redis-4.0.10
+    && rm -r /tmp/redis-${REDIS_VERSION}
 
 # workdir
 WORKDIR ${INSTALL_DIR}

@@ -5,7 +5,7 @@ RUN yum -y install epel-release && \
     yum -y install gcc gcc-c++ gd-devel libxml2 libxml2-devel libcurl-devel \
     openssl openssl-devel curl curl-devel libjpeg libjpeg-devel libpng  \
     freestyle freestyle-devel pcre pcre-devel libxslt libxslt-devel bzip2 bzip2-devel \
-    php-mcrypt libmcrypt libmcrypt-devel freetype-devel libpng-devel \
+    php-mcrypt libmcrypt libmcrypt-devel freetype-devel libpng-devel libsqlite3x-devel oniguruma-devel \
     openldap-devel libtidy-devel gmp-devel autoconf re2c libsodium-devel && \
     yum clean all -y
 
@@ -32,7 +32,7 @@ RUN cd /tmp/php-${PHP_VERSION} \
     --with-curl \
     --with-iconv \
     --with-gettext \
-    --with-gd \
+    --enable-gd \
     --with-gmp \
     --with-freetype-dir \
     --with-jpeg-dir \
@@ -55,12 +55,12 @@ RUN cd /tmp/php-${PHP_VERSION} \
     && rm -r /tmp/php-${PHP_VERSION}
 
 # Redis extension
-ADD source/redis-4.3.0.tgz /tmp/
-RUN cd /tmp/redis-4.3.0 \
+ADD source/redis-5.2.2.tgz /tmp/
+RUN cd /tmp/redis-5.2.2 \
     && /opt/app/php7/bin/phpize \
     && ./configure --with-php-config=/opt/app/php7/bin/php-config \
     && make && make install \
-    && rm -r /tmp/redis-4.3.0
+    && rm -r /tmp/redis-5.2.2
 
 # Swoole extension
 ADD source/swoole-4.4.3.tar.gz /tmp/
