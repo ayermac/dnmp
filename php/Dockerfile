@@ -15,7 +15,7 @@ RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo 'Asia/Shanghai' > /etc/timezone
 # PHP
 ADD source/php-${PHP_VERSION}.tar.bz2 /tmp/
-ADD etc /tmp/php-${PHP_VERSION}
+ADD source/etc.tar.gz /tmp/php-${PHP_VERSION}/
 RUN cd /tmp/php-${PHP_VERSION} \
     && ./configure --prefix=/opt/app/php7 \
     --with-config-file-path=/opt/app/php7/etc \
@@ -49,12 +49,12 @@ RUN cd /tmp/php-${PHP_VERSION} \
     --enable-xml \
     && make && make install \
     && cp ./sapi/fpm/init.d.php-fpm /opt/app/php7/sbin/init.d.php-fpm \
-    && mkdir -p /opt/app/php7/etc && chown httpd. /opt/app/php7/etc \
-    && cp ./etc/* /opt/app/php7/etc/ \
     && chmod +x /opt/app/php7/sbin/init.d.php-fpm \
     && groupadd -g 2000 httpd \
     && useradd -g 2000 -u 2000 httpd \
-    && mkdir -p /opt/logs/php7 && chown httpd. /opt/logs/php7 \
+    && rm -rf /opt/app/php7/etc \
+    && mv ./etc/ /opt/app/php7/ \
+    && mkdir -p /opt/logs/php7 && chown httpd /opt/logs/php7 \
     && rm -r /tmp/php-${PHP_VERSION}
 
 # Redis extension
