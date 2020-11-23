@@ -1,4 +1,4 @@
-FROM centos:7.4.1708
+FROM centos:7.8.2003
 MAINTAINER chenchao
 
 ENV INSTALL_DIR /opt/app/redis50

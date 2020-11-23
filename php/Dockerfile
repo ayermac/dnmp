@@ -1,4 +1,4 @@
-FROM centos:7.4.1708
+FROM centos:7.8.2003
 MAINTAINER chenchao
 
 RUN yum -y install epel-release && \
@@ -66,7 +66,7 @@ RUN cd /tmp/redis-5.2.2 \
     && rm -r /tmp/redis-5.2.2
 
 # Swoole extension
-ADD source/swoole-4.4.3.tar.gz /tmp/
+ADD source/swoole-4.5.8.tar.gz /tmp/
 RUN cd /tmp && \
     mv swoole-src* swoole-src && \
     cd swoole-src && \

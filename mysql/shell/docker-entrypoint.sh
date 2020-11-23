@@ -11,9 +11,9 @@ if [ "$1" = 'start' ]; then
 fi
 
 if [ "$1" = 'init' ]; then
-    ./bin/mysqld  --initialize --user=mysql
-    password=`cat /opt/app/mysql57/logs/error.log | grep -i 'temporary password' | awk -F ': ' '{print $2}'`
-    ./bin/mysql -uroot -p${password} -e "alter user 'root'@'localhost' identified by '123456';GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456';"
+    ./bin/mysqld --initialize-insecure --user=mysql
+    #password=`cat /opt/app/mysql57/logs/error.log | grep -i 'temporary password' | awk -F ': ' '{print $2}'`
+    #./bin/mysql -uroot -p${password} -e "alter user 'root'@'localhost' identified by '123456';GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456';"
 fi
 
 exec "$@"

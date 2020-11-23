@@ -1,4 +1,4 @@
-FROM centos:7.4.1708
+FROM centos:7.8.2003
 MAINTAINER chenchao
 
 ENV INSTALL_DIR /opt/app/mysql57
@@ -61,7 +61,7 @@ RUN cd /tmp/mysql-5.7.22 \
     && chown -R mysql:mysql ${INSTALL_DIR}/* \
     && rm -r /tmp/mysql-5.7.22
 
-ADD etc/my.cnf ${INSTALL_DIR}/etc/
+ADD mysql57/etc/my.cnf ${INSTALL_DIR}/etc/
 
 # workdir
 WORKDIR ${INSTALL_DIR}
@@ -72,7 +72,7 @@ RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh \
     && chmod +x /usr/local/bin/docker-entrypoint.sh \
     && ln -s ${INSTALL_DIR}/bin/mysql* /usr/local/bin/
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint.sh init"]
 
 EXPOSE 3306
-CMD ["mysqld"]
+CMD ["mysqld --defaults-file=${INSTALL_DIR}/etc/my.cnf --user=mysql"]
