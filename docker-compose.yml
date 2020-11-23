@@ -10,7 +10,6 @@ services:
     - "${NGINX_HTTP_HOST_PORT}:80"
     volumes:
     - ./www:/opt/case
-    - ./nginx/logs:/opt/app/nginx/logs
     - ./nginx/conf/nginx.conf:/opt/app/nginx/conf/nginx.conf
     - ./nginx/conf/conf.d:/opt/app/nginx/conf/conf.d
     networks:
@@ -31,7 +30,6 @@ services:
     - ./php/etc/php-fpm.conf:/opt/app/php7/etc/php-fpm.conf
     - ./php/etc/php.ini:/opt/app/php7/etc/php.ini
     - ./php/etc/php-fpm.d/pool-web.conf:/opt/app/php7/etc/php-fpm.d/pool-web.conf
-    - ./php/logs/:/opt/logs/php7/
     networks:
       mywebnet:
         ipv4_address: ${PHP_IPV4_ADDRESS}
@@ -46,11 +44,14 @@ services:
     ports:
     - "${MYSQL_HTTP_PORT}:3306"
     volumes:
-    - ./mysql/etc/my.cnf:/opt/app/mysql57/etc/my.cnf
-    - ./mysql/tmp/:/opt/app/mysql57/tmp/
-    - ./mysql/var/:/opt/app/mysql57/var/
-    - ./mysql/data/:/opt/app/mysql57/data/
-    - ./mysql/logs/:/opt/app/mysql57/logs/
+    - ./mysql/mysql57/etc/my.cnf:/opt/app/mysql57/etc/my.cnf
+    - ./mysql/mysql57/tmp/:/opt/app/mysql57/tmp/
+    - ./mysql/mysql57/var/:/opt/app/mysql57/var/
+    - ./mysql/mysql57/data/:/opt/app/mysql57/data/
+    - ./mysql/mysql57/logs/:/opt/app/mysql57/logs/
+    - ./mysql/mysql57/redolog/:/opt/app/mysql57/redolog/
+    - ./mysql/mysql57/undolog/:/opt/app/mysql57/undolog/
+    - ./mysql/mysql57/binlog/:/opt/app/mysql57/binlog/
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     networks:
@@ -67,10 +68,9 @@ services:
     ports:
     - "${REDIS_HTTP_PORT}:6379"
     volumes:
-    - ./redis/db_6379/:/opt/app/redis50/db_6379/
-    - ./redis/etc/redis_6379.conf:/opt/app/redis50/etc/redis_6379.conf
-    - ./redis/logs/:/opt/app/redis50/logs/
-    - ./redis/var/:/opt/app/redis50/var/
+    - ./redis/redis50/db/:/opt/app/redis50/db/
+    - ./redis/redis50/etc/redis_6379.conf:/opt/app/redis50/etc/redis_6379.conf
+    - ./redis/redis50/var/:/opt/app/redis50/var/
     networks:
       mywebnet:
         ipv4_address: ${REDIS_IPV4_ADDRESS}
