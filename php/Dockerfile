@@ -6,7 +6,7 @@ RUN yum -y install epel-release && \
     openssl openssl-devel curl curl-devel libjpeg libjpeg-devel libpng  \
     freestyle freestyle-devel pcre pcre-devel libxslt libxslt-devel bzip2 bzip2-devel \
     php-mcrypt libmcrypt libmcrypt-devel freetype-devel libpng-devel libsqlite3x-devel oniguruma-devel \
-    openldap-devel libtidy-devel gmp-devel autoconf re2c libsodium-devel && \
+    openldap-devel libtidy-devel gmp-devel autoconf re2c libsodium-devel cmake && \
     yum clean all -y
 
 ARG PHP_VERSION
@@ -83,16 +83,16 @@ RUN cd /tmp && \
     rm -rf /tmp/swoole-src
 
 # Apcu extension
-ADD source/apcu-5.1.8.tgz /tmp/ \
-RUN cd /tmp/apcu-5.1.8 \
+ADD source/apcu-5.1.18.tgz /tmp/
+RUN cd /tmp/apcu-5.1.18 \
     && /opt/app/php7/bin/phpize \
     && ./configure --with-php-config=/opt/app/php7/bin/php-config \
     && make && make install \
-    && rm -rf /tmp/apcu-5.1.8
+    && rm -rf /tmp/apcu-5.1.18
 
 # Amqp extension
-ADD source/amqp-1.9.4.tgz /tmp/ \
-ADD source/rabbitmq-c-0.9.0.tar.gz /tmp/ \
+ADD source/amqp-1.9.4.tgz /tmp/
+ADD source/rabbitmq-c-0.9.0.tar.gz /tmp/
 RUN cd /tmp/rabbitmq-c-0.9.0 \
     && mkdir build \
     && cd build \
@@ -108,7 +108,7 @@ RUN cd /tmp/rabbitmq-c-0.9.0 \
     && rm -rf /tmp/amqp-1.9.4
 
 # Mongo extension
-ADD source/mongodb-1.5.3.tgz /tmp/ \
+ADD source/mongodb-1.5.3.tgz /tmp/
 RUN cd /tmp/mongodb-1.5.3 \
     && /opt/app/php7/bin/phpize \
     && ./configure --with-php-config=/opt/app/php7/bin/php-config \
