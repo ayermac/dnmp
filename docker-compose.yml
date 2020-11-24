@@ -55,31 +55,7 @@ services:
       networks:
         mywebnet:
           ipv4_address: ${MYSQL_IPV4_ADDRESS}
-      container_name: ${MYSQL_CONTAINER_NAME}  
-
-  #mysql:
-  #  build: 
-  #    context: ./mysql
-  #    args:
-  #      MYSQL_VERSION: ${MYSQL_VERSION}
-  #  restart: always
-  #  ports:
-  #  - "${MYSQL_HTTP_PORT}:3306"
-  #  #volumes:
-  #  #- ./mysql/mysql57/etc/my.cnf:/opt/app/mysql57/etc/my.cnf
-  #  #- ./mysql/mysql57/tmp/:/opt/app/mysql57/tmp/
-  #  #- ./mysql/mysql57/var/:/opt/app/mysql57/var/
-  #  #- ./mysql/mysql57/data/:/opt/app/mysql57/data/
-  #  #- ./mysql/mysql57/logs/:/opt/app/mysql57/logs/
-  #  #- ./mysql/mysql57/redolog/:/opt/app/mysql57/redolog/
-  #  #- ./mysql/mysql57/undolog/:/opt/app/mysql57/undolog/
-  #  #- ./mysql/mysql57/binlog/:/opt/app/mysql57/binlog/
-  #  environment:
-  #    MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-  #  networks:
-  #    mywebnet:
-  #      ipv4_address: ${MYSQL_IPV4_ADDRESS}
-  #  container_name: ${MYSQL_CONTAINER_NAME}
+      container_name: ${MYSQL_CONTAINER_NAME}
 
   redis:
     build: 
@@ -98,6 +74,34 @@ services:
         ipv4_address: ${REDIS_IPV4_ADDRESS}
     container_name: ${REDIS_CONTAINER_NAME}
 
+  mongo:
+    build: ./mongo
+    ports:
+      - "${MONGODB_PORT}:27017"
+    volumes:
+      - ${DATA_PATH_HOST}/mongo:/data/db
+    networks:
+      mywebnet:
+        ipv4_address: ${MONGO_IPV4_ADDRESS}
+    container_name: ${MONGO_CONTAINER_NAME}
+
+  rabbitmq:
+    build: ./rabbitmq
+    ports:
+      - "${RABBITMQ_NODE_HOST_PORT}:5672"
+      - "${RABBITMQ_MANAGEMENT_HTTP_HOST_PORT}:15672"
+      - "${RABBITMQ_MANAGEMENT_HTTPS_HOST_PORT}:15671"
+    privileged: true
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    hostname: dnmp-rabbitmq
+    volumes:
+      - ${DATA_PATH_HOST}/rabbitmq:/var/lib/rabbitmq
+    networks:
+      mywebnet:
+        ipv4_address: ${RABBITMQ_IPV4_ADDRESS}
+    container_name: ${RABBITMQ_CONTAINER_NAME}
 
 networks:
   mywebnet:
