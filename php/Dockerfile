@@ -96,13 +96,15 @@ ADD source/rabbitmq-c-0.9.0.tar.gz /tmp/
 RUN cd /tmp/rabbitmq-c-0.9.0 \
     && mkdir build \
     && cd build \
-    && cmake -DCMAKE_INSTALL_PREFIX=/opt/app/rabbitmq .. \
-    && cmake --build . --target install \
+    && cmake .. -DCMAKE_INSTALL_PREFIX=/opt/app/rabbitmq-c -DBUILD_TOOLS:BOOL=OFF \
+    && make all && make install \
+    && cd /opt/app/rabbitmq-c \
+    && ln -s lib64 lib \
     && cd /tmp/amqp-1.9.4 \
     && /opt/app/php7/bin/phpize \
     && ./configure \
     --with-php-config=/opt/app/php7/bin/php-config \
-    --with-amqp --with-librabbitmq-dir=/opt/app/rabbitmq \
+    --with-amqp --with-librabbitmq-dir=/opt/app/rabbitmq-c \
     && make && make install \
     && rm -rf /tmp/rabbitmq-c-0.9.0 \
     && rm -rf /tmp/amqp-1.9.4
