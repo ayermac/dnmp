@@ -5,8 +5,7 @@
 /
 ├── mysql                       mysql目录
 │   ├── etc                     配置文件目录
-│   ├── shell                   初始化启动mysql，shell脚本
-│   ├── source                  mysql源代码
+│   ├── docker-entrypoint-initdb.d 初始化启动mysql
 │   ├── Dockerfile              mysql镜像构建文件
 ├── nginx                       nginx目录
 │   ├── conf                    配置文件目录

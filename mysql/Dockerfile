@@ -1,78 +1,18 @@
-FROM centos:7.8.2003
-MAINTAINER chenchao
+ARG MYSQL_VERSION=latest
+FROM mysql:${MYSQL_VERSION}
 
-ENV INSTALL_DIR /opt/app/mysql57
+LABEL maintainer="Mahmoud Zalt <mahmoud@zalt.me>"
 
-COPY ./source/gosu-amd64 /usr/bin/gosu
+#####################################
+# Set Timezone
+#####################################
 
-RUN yum -y install epel-release \
-    && chmod +x /usr/bin/gosu
+ARG TZ=UTC
+ENV TZ ${TZ}
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && chown -R mysql:root /var/lib/mysql/
 
-RUN yum -y install zlib-devel openssl-devel libaio-devel \
-    git gcc gcc-c++ ncurses-devel bison cmake make \
-    && yum clean all -y
+COPY etc/my.cnf /etc/mysql/conf.d/my.cnf
 
-# Timezone
-RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
-    && echo 'Asia/Shanghai' > /etc/timezone
-
-# Mysql
-ADD source/mysql-boost-5.7.22.tar.gz /tmp/
-RUN cd /tmp/mysql-5.7.22 \
-    && mkdir -p build \
-    && cd build \
-    && (cmake .. \
-        -DBUILD_CONFIG=mysql_release \
-        -DFEATURE_SET="community" \
-        -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
-        -DWITH_EMBEDDED_SERVER=off \
-        -DINSTALL_SBINDIR=bin \
-        -DINSTALL_SCRIPTDIR=bin \
-        -DINSTALL_LIBDIR=lib/mysql \
-        -DINSTALL_PLUGINDIR=lib/plugin \
-        -DINSTALL_INCLUDEDIR=include \
-        -DINSTALL_INFODIR=share/info \
-        -DINSTALL_MANDIR=share/man \
-        -DINSTALL_MYSQLSHAREDIR=share/mysql \
-        -DINSTALL_SUPPORTFILESDIR=share/mysql \
-        -DINSTALL_MYSQLTESTDIR=mysql-test \
-        -DDEFAULT_CHARSET=utf8 \
-        -DDEFAULT_COLLATION=utf8_general_ci \
-        -DEXTRA_CHARSETS=all \
-        -DENABLED_LOCAL_INFILE=ON \
-        -DWITH_LIBEVENT=bundled \
-        -DWITH_SSL=bundled \
-        -DWITH_ZLIB=bundled \
-        -DWITH_INNODB_MEMCACHED=on \
-        -DWITH_BOOST=../boost \
-        -DWITH_UNIT_TESTS=on \
-        -DWITH_DEBUG=off \
-    ) \
-    && make -j4 \
-    && make install \
-    && mkdir -p ${INSTALL_DIR}/var/ \
-    && mkdir -p ${INSTALL_DIR}/tmp/ \
-    && mkdir -p ${INSTALL_DIR}/logs/binlog/bin-log \
-    && mkdir -p ${INSTALL_DIR}/logs/redolog/ \
-    && mkdir -p ${INSTALL_DIR}/logs/undolog/ \
-    && mkdir -p ${INSTALL_DIR}/etc/ \
-    && groupadd -g 27 -o -r mysql \
-    && useradd -M -g mysql -o -r -d /dev/null -s /sbin/nologin -u 27 mysql \
-    && chown -R mysql:mysql ${INSTALL_DIR}/* \
-    && rm -r /tmp/mysql-5.7.22
-
-ADD mysql57/etc/my.cnf ${INSTALL_DIR}/etc/
-
-# workdir
-WORKDIR ${INSTALL_DIR}
-
-COPY ./shell/docker-entrypoint.sh /usr/local/bin/
-# backwards compat
-RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh \
-    && chmod +x /usr/local/bin/docker-entrypoint.sh \
-    && ln -s ${INSTALL_DIR}/bin/mysql* /usr/local/bin/
-
-ENTRYPOINT ["docker-entrypoint.sh init"]
+CMD ["mysqld"]
 
 EXPOSE 3306
-CMD ["mysqld --defaults-file=${INSTALL_DIR}/etc/my.cnf --user=mysql"]

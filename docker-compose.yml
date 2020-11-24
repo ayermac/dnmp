@@ -36,28 +36,50 @@ services:
     container_name: ${PHP_CONTAINER_NAME}
 
   mysql:
-    build: 
-      context: ./mysql
-      args:
-        MYSQL_VERSION: ${MYSQL_VERSION}
-    restart: always
-    ports:
-    - "${MYSQL_HTTP_PORT}:3306"
-    volumes:
-    - ./mysql/mysql57/etc/my.cnf:/opt/app/mysql57/etc/my.cnf
-    - ./mysql/mysql57/tmp/:/opt/app/mysql57/tmp/
-    - ./mysql/mysql57/var/:/opt/app/mysql57/var/
-    - ./mysql/mysql57/data/:/opt/app/mysql57/data/
-    - ./mysql/mysql57/logs/:/opt/app/mysql57/logs/
-    - ./mysql/mysql57/redolog/:/opt/app/mysql57/redolog/
-    - ./mysql/mysql57/undolog/:/opt/app/mysql57/undolog/
-    - ./mysql/mysql57/binlog/:/opt/app/mysql57/binlog/
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-    networks:
-      mywebnet:
-        ipv4_address: ${MYSQL_IPV4_ADDRESS}
-    container_name: ${MYSQL_CONTAINER_NAME}
+      build:
+        context: ./mysql
+        args:
+          - MYSQL_VERSION=${MYSQL_VERSION}
+      environment:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - TZ=${WORKSPACE_TIMEZONE}
+      volumes:
+        - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+        - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+        - ${MYSQL_CNF}:/etc/mysql/conf.d/my.cnf
+      ports:
+        - "${MYSQL_PORT}:3306"
+      networks:
+        mywebnet:
+          ipv4_address: ${MYSQL_IPV4_ADDRESS}
+      container_name: ${MYSQL_CONTAINER_NAME}  
+
+  #mysql:
+  #  build: 
+  #    context: ./mysql
+  #    args:
+  #      MYSQL_VERSION: ${MYSQL_VERSION}
+  #  restart: always
+  #  ports:
+  #  - "${MYSQL_HTTP_PORT}:3306"
+  #  #volumes:
+  #  #- ./mysql/mysql57/etc/my.cnf:/opt/app/mysql57/etc/my.cnf
+  #  #- ./mysql/mysql57/tmp/:/opt/app/mysql57/tmp/
+  #  #- ./mysql/mysql57/var/:/opt/app/mysql57/var/
+  #  #- ./mysql/mysql57/data/:/opt/app/mysql57/data/
+  #  #- ./mysql/mysql57/logs/:/opt/app/mysql57/logs/
+  #  #- ./mysql/mysql57/redolog/:/opt/app/mysql57/redolog/
+  #  #- ./mysql/mysql57/undolog/:/opt/app/mysql57/undolog/
+  #  #- ./mysql/mysql57/binlog/:/opt/app/mysql57/binlog/
+  #  environment:
+  #    MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #  networks:
+  #    mywebnet:
+  #      ipv4_address: ${MYSQL_IPV4_ADDRESS}
+  #  container_name: ${MYSQL_CONTAINER_NAME}
 
   redis:
     build: 
