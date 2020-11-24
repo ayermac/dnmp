@@ -63,7 +63,7 @@ RUN cd /tmp/redis-5.2.2 \
     && /opt/app/php7/bin/phpize \
     && ./configure --with-php-config=/opt/app/php7/bin/php-config \
     && make && make install \
-    && rm -r /tmp/redis-5.2.2
+    && rm -rf /tmp/redis-5.2.2
 
 # Swoole extension
 ADD source/swoole-4.5.8.tar.gz /tmp/
@@ -80,7 +80,41 @@ RUN cd /tmp && \
     --enable-sockets \
     --enable-mysqlnd && \
     make clean && make && make install && \
-    rm -r /tmp/swoole-src
+    rm -rf /tmp/swoole-src
+
+# Apcu extension
+ADD source/apcu-5.1.8.tgz /tmp/ \
+RUN cd /tmp/apcu-5.1.8 \
+    && /opt/app/php7/bin/phpize \
+    && ./configure --with-php-config=/opt/app/php7/bin/php-config \
+    && make && make install \
+    && rm -rf /tmp/apcu-5.1.8
+
+# Amqp extension
+ADD source/amqp-1.9.4.tgz /tmp/ \
+ADD source/rabbitmq-c-0.9.0.tar.gz /tmp/ \
+RUN cd /tmp/rabbitmq-c-0.9.0 \
+    && mkdir build \
+    && cd build \
+    && cmake -DCMAKE_INSTALL_PREFIX=/opt/app/rabbitmq .. \
+    && cmake --build . --target install \
+    && cd /tmp/amqp-1.9.4 \
+    && /opt/app/php7/bin/phpize \
+    && ./configure \
+    --with-php-config=/opt/app/php7/bin/php-config \
+    --with-amqp --with-librabbitmq-dir=/opt/app/rabbitmq \
+    && make && make install \
+    && rm -rf /tmp/rabbitmq-c-0.9.0 \
+    && rm -rf /tmp/amqp-1.9.4
+
+# Mongo extension
+ADD source/mongodb-1.5.3.tgz /tmp/ \
+RUN cd /tmp/mongodb-1.5.3 \
+    && /opt/app/php7/bin/phpize \
+    && ./configure --with-php-config=/opt/app/php7/bin/php-config \
+    && make && make install \
+    && rm -r /tmp/mongodb-1.5.3 \
+    && mkdir -p /opt/app/php7/tmp/sessions
 
 EXPOSE 9000
 
