@@ -1,5 +1,5 @@
 # Docker搭建的PHP开发环境
-# 已有环境 Nginx+PHP7+PHP8+MySQL+Redis+Elasticsearch+mongodb+rabbitmq
+## 已有环境 Nginx+PHP7+PHP8+MySQL+Redis+Elasticsearch+mongodb+rabbitmq
 
 ## 目录结构
 ```
