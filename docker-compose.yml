@@ -24,6 +24,7 @@ services:
   #     context: ./php
   #     args:
   #       PHP_VERSION: ${PHP_VERSION}
+  #   image: dnmp_php:7.4.7  
   #   restart: always
   #   volumes:
   #   - ./www:/opt/case
@@ -38,6 +39,7 @@ services:
   php:
     build: 
       context: ./php8
+    image: dnmp_php:8.0
     restart: always
     volumes:
     - ./www:/opt/case
