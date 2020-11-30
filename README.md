@@ -1,26 +1,35 @@
-# Docker搭建的PHP开发环境（Nginx+PHP+MySQL+Redis）
+# Docker搭建的PHP开发环境
+# 已有环境 Nginx+PHP7+PHP8+MySQL+Redis+Elasticsearch+mongodb+rabbitmq
 
 ## 目录结构
 ```
 /
-├── mysql                       mysql目录
-│   ├── etc                     配置文件目录
-│   ├── docker-entrypoint-initdb.d 初始化启动mysql
-│   ├── Dockerfile              mysql镜像构建文件
-├── nginx                       nginx目录
-│   ├── conf                    配置文件目录
-│   ├── source                  nginx源代码
-│   ├── Dockerfile              nginx镜像构建文件
-├── php                         php目录
-│   ├── etc                     配置文件目录
-│   ├── source                  php源代码
-│   ├── Dockerfile              php镜像构建文件
-├── redis                       redis目录
-│   ├── etc                     配置文件目录
-│   ├── source                  redis源代码
-│   ├── Dockerfile              redis镜像构建文件
-├── env.smaple                  环境配置示例文件
-└── www                         PHP代码目录
+├─data
+├─elasticsearch
+├─mongo
+├─mysql
+│  ├─docker-entrypoint-initdb.d
+│  └─etc
+├─nginx
+│  ├─conf
+│  │  └─conf.d
+│  └─source
+├─php
+│  ├─etc
+│  │  └─php-fpm.d
+│  └─source
+├─php8
+│  └─etc
+│      └─php-fpm.d
+├─rabbitmq
+├─redis
+│  ├─redis50
+│  │  ├─db
+│  │  ├─etc
+│  │  └─var
+│  └─source
+└─www
+    └─default
 ```
 ## 部署
 ```
