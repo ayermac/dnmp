@@ -16,7 +16,7 @@ services:
       mywebnet:
         ipv4_address: ${NGINX_IPV4_ADDRESS}
     links:
-    - php8
+    - php
     container_name: ${NGINX_CONTAINER_NAME}
 
   # php:
@@ -35,11 +35,12 @@ services:
   #       ipv4_address: ${PHP_IPV4_ADDRESS}
   #   container_name: ${PHP_CONTAINER_NAME}
   #   
-  php8:
+  php:
     build: 
       context: ./php8
     restart: always
     volumes:
+    - ./www:/opt/case
     - ./php8/etc/php-fpm.conf:/etc/opt/remi/php80/php-fpm.conf
     - ./php8/etc/php-fpm.d/pool-web.conf:/etc/opt/remi/php80/php-fpm.d/pool-web.conf
     networks:

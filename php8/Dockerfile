@@ -45,7 +45,6 @@ useradd -g 2000 -u 2000 httpd && \
 mkdir -p /opt/logs/php8 && chown httpd /opt/logs/php8
 
 RUN rm -rf /etc/opt/remi/php80/php-fpm.d/www.conf
-
 EXPOSE 9000
 
 CMD ["/opt/remi/php80/root/usr/sbin/php-fpm", "--nodaemonize"]
