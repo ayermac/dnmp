@@ -32,7 +32,7 @@ dnf repolist
 
 # 安装 php 8（centos 8）
 RUN dnf install -y yum-utils && \
-dnf install -y php80 php80-php-devel  php80-php-fpm  php80-php-mbstring php80-php-memcached php80-php-redis  php80-php-mysqlnd  php80-php-pdo  php80-php-bcmath php80-php-xml php80-php-gd php80-php-gmp php80-php-igbinary php80-php-imagick php80-php-pdo_mysql php80-php-posix php80-php-simplexml  php80-php-opcache php80-php-xsl php80-php-xmlwriter php80-php-xmlreader php80-php-swoole php80-php-zip  php80-php-yaml php80-php-uuid
+dnf install -y php80 php80-php-devel  php80-php-fpm  php80-php-mbstring php80-php-memcached php80-php-redis  php80-php-mysqlnd  php80-php-pdo  php80-php-bcmath php80-php-xml php80-php-gd php80-php-gmp php80-php-igbinary php80-php-imagick php80-php-pdo_mysql php80-php-posix php80-php-simplexml  php80-php-opcache php80-php-xsl php80-php-xmlwriter php80-php-xmlreader php80-php-swoole php80-php-zip  php80-php-yaml php80-php-uuid php80-php-pecl-mongodb php80-php-pecl-amqp php80-php-pecl-apcu
 
 # 安装阿里的 composer 镜像源（centos 8）
 RUN ln -s /usr/bin/php80 /usr/bin/php && \
