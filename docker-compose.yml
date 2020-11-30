@@ -16,27 +16,28 @@ services:
       mywebnet:
         ipv4_address: ${NGINX_IPV4_ADDRESS}
     links:
-    - php
+    - php7
+    - php8
     container_name: ${NGINX_CONTAINER_NAME}
 
-  # php:
-  #   build: 
-  #     context: ./php
-  #     args:
-  #       PHP_VERSION: ${PHP_VERSION}
-  #   image: dnmp_php:7.4.7  
-  #   restart: always
-  #   volumes:
-  #   - ./www:/opt/case
-  #   - ./php/etc/php-fpm.conf:/opt/app/php7/etc/php-fpm.conf
-  #   - ./php/etc/php.ini:/opt/app/php7/etc/php.ini
-  #   - ./php/etc/php-fpm.d/pool-web.conf:/opt/app/php7/etc/php-fpm.d/pool-web.conf
-  #   networks:
-  #     mywebnet:
-  #       ipv4_address: ${PHP_IPV4_ADDRESS}
-  #   container_name: ${PHP_CONTAINER_NAME}
-  #   
-  php:
+  php7:
+    build: 
+      context: ./php
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+    image: dnmp_php:7.4.7  
+    restart: always
+    volumes:
+    - ./www:/opt/case
+    - ./php/etc/php-fpm.conf:/opt/app/php7/etc/php-fpm.conf
+    - ./php/etc/php.ini:/opt/app/php7/etc/php.ini
+    - ./php/etc/php-fpm.d/pool-web.conf:/opt/app/php7/etc/php-fpm.d/pool-web.conf
+    networks:
+      mywebnet:
+        ipv4_address: ${PHP_IPV4_ADDRESS}
+    container_name: ${PHP_CONTAINER_NAME}
+
+  php8:
     build: 
       context: ./php8
     image: dnmp_php:8.0
@@ -120,6 +121,7 @@ services:
 
   # elasticsearch:
   #   build: ./elasticsearch
+  #   image: dnmp_elasticsearch:7.1.1
   #   volumes:
   #     - ${DATA_PATH_HOST}/elasticsearch:/usr/share/elasticsearch/data
   #   environment:
