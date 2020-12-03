@@ -1,3 +1,3 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+FROM elasticsearch:7.9.3
 
 EXPOSE 9200 9300
